@@ -14,7 +14,7 @@
     <style>
         #map {
             width: 100%;
-            height: 500px;
+            height: 400px;
         }
     </style>
 </head>
@@ -23,7 +23,7 @@
 
     <script>
         // Initialize the map and set its view to Richland Center, WI
-        var map = L.map('map').setView([43.3342, -90.3840], 12);
+        var map = L.map('map').setView([43.3342, -90.3840], 13);
 
         // Use Esri satellite tile layer
         L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -34,14 +34,22 @@
         // Create a draggable marker on the map
         var marker = L.marker([43.3342, -90.3840], {draggable: true}).addTo(map);
 
+        // Variables to store coordinates
+        var lat, lng;
+
         // Handle marker's drag event to capture coordinates
         marker.on('dragend', function(e) {
-            var lat = marker.getLatLng().lat;
-            var lng = marker.getLatLng().lng;
-            
-            // Open JotForm in a new tab with lat and lng in the URL
-             window.open("https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng, "_blank");
+            lat = marker.getLatLng().lat;
+            lng = marker.getLatLng().lng;
         });
+
+        // Function to pass coordinates to the form when the NEXT button is clicked
+        function passCoordinates() {
+            if (window.parent) {
+                // Send the coordinates to the parent form via postMessage
+                window.parent.postMessage({lat: lat, lng: lng}, "*");
+            }
+        }
     </script>
 </body>
 </html>
