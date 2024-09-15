@@ -7,13 +7,14 @@
 
     <!-- Load Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
     <!-- Load Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
         #map {
             width: 100%;
-            height: 500px;
+            height: 400px;
         }
     </style>
 </head>
@@ -21,41 +22,29 @@
     <div id="map"></div>
 
     <script>
-        // Initialize the map and set its view to Richland Center, WI
-        var map = L.map('map').setView([43.3342, -90.3840], 12);
+        // Initialize the map and set it to view Richland Center, WI
+        var map = L.map('map').setView([43.3342, -90.3840], 13);
 
-        // Use Esri satellite tile layer
+        // Load the Esri Satellite imagery layer
         L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri',
             subdomains: ['server', 'services']
         }).addTo(map);
 
-        // Create a draggable marker on the map
-        var marker = L.marker([43.3342, -90.3840], {draggable: true}).addTo(map);
+        // Add a draggable marker
+        var marker = L.marker([43.3342, -90.3840], { draggable: true }).addTo(map);
 
-        // Variables to store coordinates
-        var lat, lng;
+        // Variables to hold coordinates
+        var lat = 43.3342;
+        var lng = -90.3840;
 
-        // Handle marker's drag event to capture coordinates
+        // Capture the new coordinates when the marker is dragged
         marker.on('dragend', function(e) {
             lat = marker.getLatLng().lat;
             lng = marker.getLatLng().lng;
-        });
 
-        // Function to pass coordinates to JotForm using postMessage
-        function passCoordinates() {
-            // Ensure lat and lng are defined before sending
-            if (lat && lng) {
-                // Send lat/lng values to JotForm
-                window.parent.postMessage({lat: lat, lng: lng}, "*");
-            }
-        }
-
-        // Listen for the message from JotForm when Next button is clicked
-        window.addEventListener("message", function(event) {
-            if (event.data === "nextButtonClicked") {
-                passCoordinates(); // Call the fuction to send coordinates
-            }
+            // Pass coordinates to the JotForm hidden fields
+            window.parent.postMessage({ lat: lat, lng: lng }, "*");
         });
     </script>
 </body>
