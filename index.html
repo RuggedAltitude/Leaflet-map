@@ -2,13 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Leaflet Map</title>
+    <title>Leaflet Map with Satellite Imagery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Load Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-    <!-- Leaflet JS -->
+    <!-- Load Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
@@ -25,15 +25,15 @@
         // Initialize the map and set its view to Richland Center, WI
         var map = L.map('map').setView([43.3342, -90.3840], 13);
 
-        // Load and display OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+        // Use Esri satellite tile layer
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         }).addTo(map);
 
-        // Create a draggable marker
+        // Create a draggable marker on the map
         var marker = L.marker([43.3342, -90.3840], {draggable: true}).addTo(map);
 
-        // Function to handle the marker's position
+        // Handle marker's drag event to capture coordinates
         marker.on('dragend', function(e) {
             var lat = marker.getLatLng().lat;
             var lng = marker.getLatLng().lng;
