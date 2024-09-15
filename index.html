@@ -39,8 +39,8 @@
             var lat = marker.getLatLng().lat;
             var lng = marker.getLatLng().lng;
             
-            // Redirect to JotForm with lat and lng as parameters
-            window.location.href = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
+            // Open JotForm in a new tab with lat and lng in the URL
+             window.open("https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng, "_blank");
         });
     </script>
 </body>
