@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Leaflet Map with Satellite Imagery</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map with Satellite Imagery</title>
 
     <!-- Load Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -19,13 +19,21 @@
     </style>
 </head>
 <body>
+
+    <!-- Map container -->
     <div id="map"></div>
 
     <script>
-        // Initialize the map and set it to view Richland Center, WI
+        // Function to pass coordinates to JotForm using postMessage
+        function passCoordinates(lat, lng) {
+            // Send lat/lng values to the parent JotForm
+            window.parent.postMessage({ lat: lat, lng: lng }, "*");
+        }
+
+        // Initialize the map centered on Richland Center, WI
         var map = L.map('map').setView([43.3342, -90.3840], 13);
 
-        // Load the Esri Satellite imagery layer
+        // Add the Esri satellite imagery layer
         L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri',
             subdomains: ['server', 'services']
@@ -34,18 +42,13 @@
         // Add a draggable marker
         var marker = L.marker([43.3342, -90.3840], { draggable: true }).addTo(map);
 
-        // Variables to hold coordinates
-        var lat = 43.3342;
-        var lng = -90.3840;
-
         // Capture the new coordinates when the marker is dragged
-        marker.on('dragend', function(e) {
-            lat = marker.getLatLng().lat;
-            lng = marker.getLatLng().lng;
-
-            // Pass coordinates to the JotForm hidden fields
-            window.parent.postMessage({ lat: lat, lng: lng }, "*");
+        marker.on('dragend', function() {
+            var lat = marker.getLatLng().lat;
+            var lng = marker.getLatLng().lng;
+            passCoordinates(lat, lng); // Pass the coordinates to JotForm
         });
     </script>
+
 </body>
 </html>
