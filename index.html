@@ -38,7 +38,9 @@
         marker.on('dragend', function(e) {
             var lat = marker.getLatLng().lat;
             var lng = marker.getLatLng().lng;
-            console.log('Marker dropped at Latitude: ' + lat + ', Longitude: ' + lng);
+
+            // Send the coordinates to the parent form via postMessage
+            window.parent.postMessage({lat: lat, lng: lng}, "*");
         });
     </script>
 </body>
