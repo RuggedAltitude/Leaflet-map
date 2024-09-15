@@ -42,18 +42,19 @@
             lng = marker.getLatLng().lng;
         });
 
-        // Function to pass coordinates to the parent form
+        // Function to pass coordinates to JotForm using postMessage
         function passCoordinates() {
             // Ensure lat and lng are defined before sending
             if (lat && lng) {
+                // Send lat/lng values to JotForm
                 window.parent.postMessage({lat: lat, lng: lng}, "*");
             }
         }
 
-        // Listen for "next" event from parent form to send coordinates
+        // Listen for the message from JotForm when Next button is clicked
         window.addEventListener("message", function(event) {
             if (event.data === "nextButtonClicked") {
-                passCoordinates();
+                passCoordinates(); // Call the fuction to send coordinates
             }
         });
     </script>
