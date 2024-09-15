@@ -7,7 +7,6 @@
 
     <!-- Load Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
     <!-- Load Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -27,7 +26,7 @@
 
         // Use Esri satellite tile layer
         L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            attribution: 'Tiles &copy; Esri',
             subdomains: ['server', 'services']
         }).addTo(map);
 
@@ -43,15 +42,15 @@
             lng = marker.getLatLng().lng;
         });
 
-        // Function to pass coordinates when the NEXT button is clicked
+        // Function to pass coordinates to the parent form
         function passCoordinates() {
-            if (window.parent) {
-                // Send the coordinates to the parent form via postMessage
+            // Ensure lat and lng are defined before sending
+            if (lat && lng) {
                 window.parent.postMessage({lat: lat, lng: lng}, "*");
             }
         }
 
-        // Attach event listener to the NEXT button in the form
+        // Listen for "next" event from parent form to send coordinates
         window.addEventListener("message", function(event) {
             if (event.data === "nextButtonClicked") {
                 passCoordinates();
