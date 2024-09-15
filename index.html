@@ -14,7 +14,7 @@
     <style>
         #map {
             width: 100%;
-            height: 400px;
+            height: 500px;
         }
     </style>
 </head>
@@ -23,7 +23,7 @@
 
     <script>
         // Initialize the map and set its view to Richland Center, WI
-        var map = L.map('map').setView([43.3342, -90.3840], 13);
+        var map = L.map('map').setView([43.3342, -90.3840], 12);
 
         // Use Esri satellite tile layer
         L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -43,13 +43,20 @@
             lng = marker.getLatLng().lng;
         });
 
-        // Function to pass coordinates to the form when the NEXT button is clicked
+        // Function to pass coordinates when the NEXT button is clicked
         function passCoordinates() {
             if (window.parent) {
                 // Send the coordinates to the parent form via postMessage
                 window.parent.postMessage({lat: lat, lng: lng}, "*");
             }
         }
+
+        // Attach event listener to the NEXT button in the form
+        window.addEventListener("message", function(event) {
+            if (event.data === "nextButtonClicked") {
+                passCoordinates();
+            }
+        });
     </script>
 </body>
 </html>
