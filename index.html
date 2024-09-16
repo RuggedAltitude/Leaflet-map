@@ -21,38 +21,17 @@
 <div id="map"></div>
 
 <script>
+    // Function to get URL parameters
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(window.parent.location.href);
+        return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
     // Initialize the map and set its view to a default location
     var map = L.map('map').setView([43.31855, -90.35706], 13);
 
     // Load satellite imagery as the tile layer
     L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
-        attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>'
-    }).addTo(map);
-
-    // Marker variable
-    var marker;
-
-    // Event listener for map click to place a marker
-    map.on('click', function(e) {
-        var lat = e.latlng.lat;
-        var lng = e.latlng.lng;
-
-        // If marker exists, remove it first
-        if (marker) {
-            map.removeLayer(marker);
-        }
-
-        // Add a new marker at the clicked location
-        marker = L.marker([lat, lng]).addTo(map);
-
-        // Update parent window URL (JotForm) with the lat/lng values
-        var parentUrl = window.parent.location.href;
-        var newUrl = new URL(parentUrl);
-        newUrl.searchParams.set('lat', lat);
-        newUrl.searchParams.set('lng', lng);
-        window.parent.location.href = newUrl;
-    });
-</script>
-
-</body>
-</html>
+        attribution: '&copy; <a href
