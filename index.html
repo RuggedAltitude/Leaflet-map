@@ -45,8 +45,12 @@
         // Add a new marker at the clicked location
         marker = L.marker([lat, lng]).addTo(map);
 
-        // Send the coordinates to the JotForm fields
-        window.parent.postMessage({lat: lat, lng: lng}, '*');
+        // Update parent window URL (JotForm) with the lat/lng values
+        var parentUrl = window.parent.location.href;
+        var newUrl = new URL(parentUrl);
+        newUrl.searchParams.set('lat', lat);
+        newUrl.searchParams.set('lng', lng);
+        window.parent.location.href = newUrl;
     });
 </script>
 
