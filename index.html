@@ -1,33 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Leaflet Map Test</title>
-
-    <!-- Load Leaflet CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        #map {
-            width: 100%;
-            height: 500px;
-        }
+        #map { height: 100vh; }
     </style>
 </head>
 <body>
 
 <div id="map"></div>
 
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
-    // Initialize the map and set its view to a default location
-    var map = L.map('map').setView([43.31855, -90.35706], 13);
+    // Initialize the map and set the view to a default location (latitude, longitude, zoom level)
+    var map = L.map('map').setView([43.327, -90.366], 13);
 
-    // Load satellite imagery as the tile layer from MapTiler
-    L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
-        attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>'
+    // Add the tile layer from MapTiler with the correct API key
+    L.tileLayer('https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
+        attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> contributors'
     }).addTo(map);
+
+    // Variable to store the marker
+    var marker;
+
+    // Function to update the URL with the latitude and longitude values
+    function updateURL(lat, lng) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('lat', lat);
+        url.searchParams.set('lng', lng);
+        window.history.replaceState({}, '', url);
+    }
+
+    // Add a click event listener to the map
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Remove the existing marker if there is one
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        // Create a new marker at the clicked location
+        marker = L.marker([lat, lng]).addTo(map);
+
+        // Update the URL with the new latitude and longitude
+        updateURL(lat, lng);
+    });
+
+    // Check if the URL already contains lat/lng parameters and set the marker
+    var urlParams = new URLSearchParams(window.location.search);
+    var lat = urlParams.get('lat');
+    var lng = urlParams.get('lng');
+
+    if (lat && lng) {
+        // Set the map view to the coordinates from the URL
+        map.setView([lat, lng], 13);
+
+        // Place a marker at the location from the URL
+        marker = L.marker([lat, lng]).addTo(map);
+    }
 </script>
 
 </body>
