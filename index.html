@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with Satellite Imagery</title>
+    <title>Simple Leaflet Map Test</title>
 
     <!-- Load Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -21,14 +21,6 @@
 <div id="map"></div>
 
 <script>
-    // Function to get URL parameters
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(window.parent.location.href);
-        return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
-
     // Initialize the map and set its view to a default location
     var map = L.map('map').setView([43.31855, -90.35706], 13);
 
@@ -36,42 +28,6 @@
     L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
         attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>'
     }).addTo(map);
-
-    var marker;
-
-    // Function to place or update the marker on the map
-    function placeMarker(lat, lng) {
-        if (marker) {
-            marker.setLatLng([lat, lng]); // Update marker position
-        } else {
-            marker = L.marker([lat, lng]).addTo(map); // Place new marker
-        }
-        map.setView([lat, lng], 13); // Adjust the view to the marker's location
-    }
-
-    // Check if lat and lng are present in the URL
-    var initialLat = getUrlParameter('lat');
-    var initialLng = getUrlParameter('lng');
-
-    // If coordinates are present in the URL, place a marker at that location
-    if (initialLat && initialLng) {
-        placeMarker(initialLat, initialLng);
-    }
-
-    // Event listener for map click to place a marker
-    map.on('click', function(e) {
-        var lat = e.latlng.lat;
-        var lng = e.latlng.lng;
-
-        placeMarker(lat, lng); // Place or update the marker
-
-        // Update parent window URL (JotForm) with the lat/lng values
-        var parentUrl = window.parent.location.href;
-        var newUrl = new URL(parentUrl);
-        newUrl.searchParams.set('lat', lat);
-        newUrl.searchParams.set('lng', lng);
-        window.parent.location.href = newUrl;
-    });
 </script>
 
 </body>
