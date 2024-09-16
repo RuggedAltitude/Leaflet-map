@@ -20,13 +20,17 @@
 
 <div id="map"></div>
 
+<!-- JotForm iFrame -->
+<iframe id="jotform-iframe" src="https://form.jotform.com/242525109753052" width="100%" height="600px"></iframe>
+
 <script>
     // Initialize the map and set its view to a default location
     var map = L.map('map').setView([43.31855, -90.35706], 13);
 
     // Load satellite imagery as the tile layer
     L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles © Esri'
+        attribution: 'Tiles © Esri',
+        subdomains: ['server', 'services']
     }).addTo(map);
 
     // Create a draggable marker on the map
@@ -37,16 +41,12 @@
         var lat = marker.getLatLng().lat;
         var lng = marker.getLatLng().lng;
 
-        // Update the URL of the current page to include the lat and lng parameters
-        var currentUrl = window.location.href.split('?')[0]; // Remove any existing query parameters
-        var newUrl = currentUrl + "?lat=" + lat + "&lng=" + lng;
+        // Append lat and lng as parameters to the JotForm iframe URL
+        var iframeUrl = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
 
-        // Change the page URL without reloading the page
-        window.history.pushState({ path: newUrl }, '', newUrl);
-
-        // If using an iframe for JotForm, you can also target it with the lat/lng values
+        // Update the iframe in the JotForm (assuming iframe has an ID or class you can target)
         var iframe = document.getElementById('jotform-iframe');
-        iframe.src = newUrl;
+        iframe.src = iframeUrl;
     });
 </script>
 
