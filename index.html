@@ -24,9 +24,11 @@
     // Initialize the map and set its default view
     var map = L.map('map').setView([43.31855, -90.35706], 13);
 
-    // Correct satellite imagery tile layer from Esri
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles © Esri'
+    // Replace the tile layer with Mapbox satellite imagery
+    L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN', {
+        attribution: '© Mapbox',
+        tileSize: 512,
+        zoomOffset: -1
     }).addTo(map);
 
     // Marker variable to hold the user's clicked location marker
