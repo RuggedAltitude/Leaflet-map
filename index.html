@@ -37,8 +37,11 @@
         var lat = marker.getLatLng().lat;
         var lng = marker.getLatLng().lng;
 
-        // Update the URL to pass lat and lng parameters to the JotForm
-        window.location.href = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
+        // Append lat and lng as parameters to the JotForm URL
+        var iframeUrl = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
+
+        // Pass coordinates to the JotForm
+        window.location.href = iframeUrl;
     });
 </script>
 
