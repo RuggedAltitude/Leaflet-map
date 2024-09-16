@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <!-- Load Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    
+
     <style>
         #map { 
             width: 100%; 
@@ -25,7 +25,7 @@
     var map = L.map('map').setView([43.31855, -90.35706], 13);
 
     // Load satellite imagery as the tile layer
-    L.tileLayer('https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles © Esri'
     }).addTo(map);
 
@@ -33,15 +33,13 @@
     var marker = L.marker([43.31855, -90.35706], {draggable: true}).addTo(map);
 
     // Event listener for dragging the marker
-    marker.on('dragend', function() {
+    marker.on('dragend', function () {
         var lat = marker.getLatLng().lat;
         var lng = marker.getLatLng().lng;
 
-        // Append lat and lng as parameters to the JotForm URL
-        var iframeUrl = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
-
-        // Pass coordinates to the JotForm
-        window.location.href = iframeUrl;
+        // Pass these values into the JotForm fields using proper names for the form fields
+        window.parent.document.querySelector('input[name="latitude"]').value = lat;
+        window.parent.document.querySelector('input[name="longitude"]').value = lng;
     });
 </script>
 
