@@ -1,40 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        #map { height: 100vh; }
-    </style>
+  <title>Leaflet Map with Coordinates Passing</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <style>
+      #map {
+          height: 600px;
+          width: 100%;
+      }
+  </style>
 </head>
 <body>
+  <div id="map"></div>
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([43.3270508320299288, -90.36632537841798], 13);
 
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script>
-    // Initialize the map and set the view to a default location (latitude, longitude, zoom level)
-    var map = L.map('map').setView([43.327, -90.366], 13);
-
-    // Add the tile layer from MapTiler with the correct API key
-    L.tileLayer('https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
-        attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> contributors'
+    // Add tile layer from MapTiler
+    L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
+        attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
-    // Variable to store the marker
     var marker;
 
-    // Function to update the URL with the latitude and longitude values
-    function updateURL(lat, lng) {
-        var url = new URL(window.location.href);
-        url.searchParams.set('lat', lat);
-        url.searchParams.set('lng', lng);
-        window.history.replaceState({}, '', url);
+    // Function to update URL and fields in JotForm
+    function updateURLAndFields(lat, lng) {
+        // Update URL
+        var newUrl = window.location.href.split('?')[0] + '?lat=' + lat + '&lng=' + lng;
+        window.history.pushState({path: newUrl}, '', newUrl);
+
+        // Pass latitude and longitude into JotForm fields
+        var latField = window.parent.document.querySelector('[name="latitude"]');
+        var lngField = window.parent.document.querySelector('[name="longitude"]');
+        if (latField && lngField) {
+            latField.value = lat;
+            lngField.value = lng;
+        }
     }
 
-    // Add a click event listener to the map
+    // Add click event to the map
     map.on('click', function(e) {
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
@@ -44,26 +51,12 @@
             map.removeLayer(marker);
         }
 
-        // Create a new marker at the clicked location
+        // Add a new marker
         marker = L.marker([lat, lng]).addTo(map);
 
-        // Update the URL with the new latitude and longitude
-        updateURL(lat, lng);
+        // Update the URL and pass coordinates to JotForm fields
+        updateURLAndFields(lat, lng);
     });
-
-    // Check if the URL already contains lat/lng parameters and set the marker
-    var urlParams = new URLSearchParams(window.location.search);
-    var lat = urlParams.get('lat');
-    var lng = urlParams.get('lng');
-
-    if (lat && lng) {
-        // Set the map view to the coordinates from the URL
-        map.setView([lat, lng], 13);
-
-        // Place a marker at the location from the URL
-        marker = L.marker([lat, lng]).addTo(map);
-    }
-</script>
-
+  </script>
 </body>
 </html>
