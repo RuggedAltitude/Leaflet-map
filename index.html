@@ -33,16 +33,20 @@
     var marker = L.marker([43.31855, -90.35706], {draggable: true}).addTo(map);
 
     // Event listener for dragging the marker
-    marker.on('dragend', function(e) {
+    marker.on('dragend', function() {
         var lat = marker.getLatLng().lat;
         var lng = marker.getLatLng().lng;
 
-        // Append lat and lng as parameters to the JotForm iframe URL
-        var iframeUrl = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
+        // Update the URL of the current page to include the lat and lng parameters
+        var currentUrl = window.location.href.split('?')[0]; // Remove any existing query parameters
+        var newUrl = currentUrl + "?lat=" + lat + "&lng=" + lng;
 
-        // Update the iframe in the JotForm (assuming iframe has an ID or class you can target)
+        // Change the page URL without reloading the page
+        window.history.pushState({ path: newUrl }, '', newUrl);
+
+        // If using an iframe for JotForm, you can also target it with the lat/lng values
         var iframe = document.getElementById('jotform-iframe');
-        iframe.src = iframeUrl;
+        iframe.src = newUrl;
     });
 </script>
 
