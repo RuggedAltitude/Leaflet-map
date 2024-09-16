@@ -24,11 +24,13 @@
     // Initialize the map and set its view to a default location
     var map = L.map('map').setView([43.31855, -90.35706], 13);
 
-    // Load satellite imagery from MapTiler
+    // Load satellite imagery from MapTiler using the API key
     L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
-        attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; OpenStreetMap contributors',
         tileSize: 512,
-        zoomOffset: -1
+        zoomOffset: -1,
+        minZoom: 1,
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; OpenStreetMap contributors'
     }).addTo(map);
 
     // Marker variable to hold the user's clicked location marker
@@ -46,9 +48,6 @@
 
         // Add the new marker at the clicked location
         marker = L.marker([lat, lng]).addTo(map);
-
-        // Send the coordinates to JotForm via URL parameters (if using an iframe method)
-        var iframeUrl = "https://form.jotform.com/242525109753052?lat=" + lat + "&lng=" + lng;
 
         // Optionally, update hidden fields with lat/lng values in the form
         document.getElementById('latitudeField').value = lat;
