@@ -34,4 +34,45 @@
 
     // Load satellite imagery as the tile layer
     L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=zW2DY2QaIkJ06wQQCfRa', {
-        attribution: '&copy; <a href
+        attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>'
+    }).addTo(map);
+
+    var marker;
+
+    // Function to place or update the marker on the map
+    function placeMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]); // Update marker position
+        } else {
+            marker = L.marker([lat, lng]).addTo(map); // Place new marker
+        }
+        map.setView([lat, lng], 13); // Adjust the view to the marker's location
+    }
+
+    // Check if lat and lng are present in the URL
+    var initialLat = getUrlParameter('lat');
+    var initialLng = getUrlParameter('lng');
+
+    // If coordinates are present in the URL, place a marker at that location
+    if (initialLat && initialLng) {
+        placeMarker(initialLat, initialLng);
+    }
+
+    // Event listener for map click to place a marker
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        placeMarker(lat, lng); // Place or update the marker
+
+        // Update parent window URL (JotForm) with the lat/lng values
+        var parentUrl = window.parent.location.href;
+        var newUrl = new URL(parentUrl);
+        newUrl.searchParams.set('lat', lat);
+        newUrl.searchParams.set('lng', lng);
+        window.parent.location.href = newUrl;
+    });
+</script>
+
+</body>
+</html>
